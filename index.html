@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>OmniVillage AI Assistant</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
     body {
@@ -20,7 +20,7 @@
       width: 100%;
       max-width: 900px;
       height: 90vh;
-      background: #fff;
+      background: #ffffff;
       border-radius: 12px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.15);
       display: flex;
@@ -29,7 +29,7 @@
 
     header {
       background: #2e8a33;
-      color: #fff;
+      color: #ffffff;
       padding: 20px;
       text-align: center;
     }
@@ -51,20 +51,20 @@
 
     .user {
       background: #4caf50;
-      color: white;
+      color: #ffffff;
       margin-left: auto;
     }
 
     .bot {
-      background: white;
-      border: 1px solid #ddd;
+      background: #ffffff;
+      border: 1px solid #dddddd;
     }
 
     footer {
       display: flex;
       padding: 15px;
       gap: 10px;
-      border-top: 1px solid #ddd;
+      border-top: 1px solid #dddddd;
     }
 
     input {
@@ -77,7 +77,7 @@
       padding: 12px 20px;
       font-size: 16px;
       background: #2e8a33;
-      color: white;
+      color: #ffffff;
       border: none;
       cursor: pointer;
     }
@@ -98,14 +98,15 @@
     </div>
 
     <footer>
-      <input id="q" placeholder="Ask about crops, business, energy..." />
-      <button onclick="sendQuestion()">Send</button>
+      <input id="q" placeholder="Ask about crops, business, energy...">
+      <button id="send">Send</button>
     </footer>
   </div>
 
   <script>
     const chat = document.getElementById("chat");
     const input = document.getElementById("q");
+    const send = document.getElementById("send");
 
     function addMsg(text, cls) {
       const div = document.createElement("div");
@@ -123,18 +124,26 @@
       input.value = "";
 
       try {
-        const res = await fetch("https://omniversechatbot.onrender.com/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: question })
-        });
+        const res = await fetch(
+          "https://omniversechatbot.onrender.com/api/chat",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: question })
+          }
+        );
 
         const data = await res.json();
         addMsg(data.reply || "No response", "bot");
-      } catch (e) {
+      } catch {
         addMsg("Backend not reachable.", "bot");
       }
     }
+
+    send.onclick = sendQuestion;
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") sendQuestion();
+    });
   </script>
 </body>
 </html>
